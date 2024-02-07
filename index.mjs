@@ -1,6 +1,8 @@
 export default function eventEmitter(valid_events) {
 	let methods = {}
 	let registered_handler = {}
+	let event_handler_added_handler = null
+	let event_handler_removed_handler = null
 
 	for (let event of valid_events) {
 		registered_handler[event] = []
@@ -34,6 +36,10 @@ export default function eventEmitter(valid_events) {
 		}
 
 		registered_handler[event_name].push(fn)
+
+		if (typeof event_handler_added_handler === "function") {
+			event_handler_added_handler(event_name, fn)
+		}
 	}
 
 	methods.removeEventListener = function removeEventListener(fn) {
@@ -46,9 +52,21 @@ export default function eventEmitter(valid_events) {
 		registered_handler[target_event_name] = registered_handler[target_event_name].filter(handler => {
 			return !Object.is(handler, fn)
 		})
+
+		if (typeof event_handler_removed_handler === "function") {
+			event_handler_removed_handler(target_event_name, fn)
+		}
 	}
 
 	return {
+		setOnEventHandlerAddedHandler(fn) {
+			event_handler_added_handler = fn
+		},
+
+		setOnEventHandlerRemovedHandler(fn) {
+			event_handler_removed_handler = fn
+		},
+
 		install(obj) {
 			for (const method of ["on", "addEventListener", "removeEventListener"]) {
 				obj[method] = methods[method]

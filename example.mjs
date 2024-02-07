@@ -5,6 +5,14 @@ const emitter = eventEmitter(["message", "request"])
 
 const dispatch = emitter.install(my_obj)
 
+emitter.setOnEventHandlerAddedHandler((event_name, handler) => {
+	console.log("event handler added for", event_name, handler)
+})
+
+emitter.setOnEventHandlerRemovedHandler((event_name, handler) => {
+	console.log("event handler removed for", event_name, handler)
+})
+
 function a(args) {
 	console.log("a", args)
 }
