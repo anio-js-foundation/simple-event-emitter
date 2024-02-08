@@ -78,7 +78,7 @@ export default function eventEmitter(valid_events) {
 				}
 
 				for (const handler of registered_handler[event_name]) {
-					handler(event_data)
+					setTimeout(handler, 0, event_data)
 				}
 			}
 		}
