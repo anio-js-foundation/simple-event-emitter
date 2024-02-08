@@ -78,13 +78,13 @@ export default function eventEmitter(valid_events) {
 				obj[method] = methods[method]
 			}
 
-			return function dispatchEvent(event_name, event_data) {
+			return function dispatchEvent(event_name, ...event_data) {
 				if (!(event_name in registered_handler)) {
 					throw new Error(`Invalid event '${event_name}'.`)
 				}
 
 				for (const handler of registered_handler[event_name]) {
-					setTimeout(handler, 0, event_data)
+					setTimeout(handler, 0, ...event_data)
 				}
 			}
 		}
