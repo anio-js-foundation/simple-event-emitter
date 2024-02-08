@@ -24,7 +24,7 @@ function b(args) {
 my_obj.on("message", b)
 my_obj.on("message", a)
 
-my_obj.removeEventListener(a)
+my_obj.removeEventListener("message", a)
 
 my_obj.on("message", a)
 

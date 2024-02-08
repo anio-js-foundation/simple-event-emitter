@@ -24,6 +24,12 @@ export default function eventEmitter(valid_events) {
 		return target_event_name
 	}
 
+	const handlerInstalledForEvent = (event_name, fn) => {
+		return registered_handler[event_name].filter(handler => {
+			return Object.is(handler, fn)
+		}).length > 0
+	}
+
 	methods.on = function on(event_name, fn) {
 		return methods.addEventListener(event_name, fn)
 	}
@@ -31,8 +37,8 @@ export default function eventEmitter(valid_events) {
 	methods.addEventListener = function addEventListener(event_name, fn) {
 		if (!(event_name in registered_handler)) {
 			throw new Error(`Invalid event '${event_name}'.`)
-		} else if (findPreviouslyInstalledEventHandler(fn) !== null) {
-			throw new Error(`This function was already registered as an event handler.`)
+		} else if (handlerInstalledForEvent(event_name, fn)) {
+			throw new Error(`This *exact* function was already registered for this event.`)
 		}
 
 		registered_handler[event_name].push(fn)
@@ -42,19 +48,19 @@ export default function eventEmitter(valid_events) {
 		}
 	}
 
-	methods.removeEventListener = function removeEventListener(fn) {
-		let target_event_name = findPreviouslyInstalledEventHandler(fn)
-
-		if (target_event_name === null) {
-			throw new Error(`Trying to remove an event handler that does not exist.`)
+	methods.removeEventListener = function removeEventListener(event_name, fn) {
+		if (!(event_name in registered_handler)) {
+			throw new Error(`Invalid event '${event_name}'.`)
+		} else if (!handlerInstalledForEvent(event_name, fn)) {
+			throw new Error(`This function was not registered for this event.`)
 		}
 
-		registered_handler[target_event_name] = registered_handler[target_event_name].filter(handler => {
+		registered_handler[event_name] = registered_handler[event_name].filter(handler => {
 			return !Object.is(handler, fn)
 		})
 
 		if (typeof event_handler_removed_handler === "function") {
-			event_handler_removed_handler(target_event_name, fn)
+			event_handler_removed_handler(event_name, fn)
 		}
 	}
 
