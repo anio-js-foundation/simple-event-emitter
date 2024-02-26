@@ -2,6 +2,7 @@ export default function eventEmitter(valid_events) {
 	let methods = {}
 	let registered_handler = {}
 	let event_handler_added_handler = null
+	let event_dispatched_handler = null
 	let event_handler_removed_handler = null
 
 	for (let event of valid_events) {
@@ -69,6 +70,10 @@ export default function eventEmitter(valid_events) {
 			event_handler_added_handler = fn
 		},
 
+		setOnEventDispatchedHandler(fn) {
+			event_dispatched_handler = fn
+		},
+
 		setOnEventHandlerRemovedHandler(fn) {
 			event_handler_removed_handler = fn
 		},
@@ -83,8 +88,20 @@ export default function eventEmitter(valid_events) {
 					throw new Error(`Invalid event '${event_name}'.`)
 				}
 
+				//
+				// todo: maybe add "blocking" events
+				// i.e. each event handler gets executed consecutively
+				// example of code flow:
+				// await handler()
+				// await next_handler()
+				// await all_handlers_dispatched()
+				//
 				for (const handler of registered_handler[event_name]) {
 					setTimeout(handler, 0, ...event_data)
+				}
+
+				if (typeof event_dispatched_handler === "function") {
+					setTimeout(event_dispatched_handler, 0, event_name, event_data)
 				}
 			}
 		}
