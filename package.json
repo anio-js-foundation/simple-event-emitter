@@ -1,12 +1,21 @@
 {
-  "name": "@anio-js-core-foundation/simple-event-emitter",
+  "name": "@anio-js-foundation/simple-event-emitter",
   "version": "0.4.0",
   "description": "A simple event emitter.",
-  "main": "index.mjs",
+  "main": "./dist/package.mjs",
   "author": "Anio Software <info@anio.software>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anio-js-core-foundation/simple-event-emitter.git"
-  }
+    "url": "git+https://github.com/anio-js-foundation/simple-event-emitter.git"
+  },
+  "devDependencies": {
+    "@anio-software/npm-package-bundler": "^1.0.0"
+  },
+  "scripts": {
+    "prepare": "./node_modules/.bin/npm-package-bundler ."
+  },
+  "files": [
+    "./dist/package.mjs"
+  ]
 }

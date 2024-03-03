@@ -1,4 +1,4 @@
-import eventEmitter from "./index.mjs"
+import eventEmitter from "./src/index.mjs"
 
 let my_obj = {}
 const emitter = eventEmitter(["message", "request"])

@@ -1,2 +1,2 @@
-# @anio-js-core-foundation/simple-event-emitter
+# @anio-js-foundation/simple-event-emitter
 
