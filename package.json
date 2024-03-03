@@ -1,6 +1,6 @@
 {
   "name": "@anio-js-foundation/simple-event-emitter",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "description": "A simple event emitter.",
   "main": "./dist/package.mjs",
   "author": "Anio Software <info@anio.software>",
